@@ -1,0 +1,5 @@
+server_address = "localhost"
+server_port = ":10011"
+
+query_login = "Yol"
+query_password = "UkL9s9vE"
