@@ -5,6 +5,7 @@ type Config struct {
 	ServerPort    string `toml:"server_port"`
 	QueryLogin    string `toml:"query_login"`
 	QueryPassword string `toml:"query_password"`
+	DatabaseURL   string `toml:"database_url"`
 }
 
 func NewConfig() *Config {
@@ -13,5 +14,6 @@ func NewConfig() *Config {
 		ServerPort:    "10011",
 		QueryLogin:    "Yol",
 		QueryPassword: "UkL9s9vE",
+		DatabaseURL:   "",
 	}
 }

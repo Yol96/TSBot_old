@@ -4,6 +4,8 @@ import (
 	"flag"
 	"log"
 
+	"github.com/Yol96/TSBot/internal/app/database"
+
 	"github.com/BurntSushi/toml"
 
 	"github.com/Yol96/TSBot/internal/app/tsbot"
@@ -24,6 +26,13 @@ func main() {
 	_, err := toml.DecodeFile(configPath, config)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	// Creating an database connection
+	err = database.InitDB(config.DatabaseURL)
+	if err != nil {
+		log.Fatal(err)
+		return
 	}
 
 	if err := tsbot.Start(config); err != nil {
