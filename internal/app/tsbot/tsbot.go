@@ -39,11 +39,12 @@ func Start(config *Config) error {
 		return err
 	}
 
-	log.Println("Bot is starting with next parameters: ", config)
+	log.Printf("Bot is starting with next parameters: %s:%s // %s:%s", config.ServerAddress, config.ServerPort,
+		config.QueryLogin, config.QueryPassword)
 
 	AddClientListeners(client)
 
 	for {
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(5 * time.Second)
 	}
 }

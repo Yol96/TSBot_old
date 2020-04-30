@@ -12,8 +12,8 @@ func userProcess(client *ts3.Client, notification chan ts3.Notification) {
 		case "notifyclientmoved", "notifycliententerview":
 			clid := i.Params[0]["clid"]
 			data, _ := client.Exec(GetClientInfo(clid))
-			cluid := data.Params[0]["client_unique_identifier"]
-			SetClientPrivileges(client, clid, cluid)
+			CheckClientPrivileges(client, data, clid)
+			CheckClientNickname(client, data, clid)
 		}
 	}
 }
