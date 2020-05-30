@@ -115,7 +115,7 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 		log.Println(err)
 	}
 
-	databaseNickname := u.Tag + u.Nickname
+	databaseNickname := "[" + u.Tag + "]" + u.Nickname
 	if nickname != databaseNickname {
 		log.Printf("Poke %s (Nickname in TS doesn`t match nickname in DB: %s)", nickname, databaseNickname)
 		client.Exec(PokeMessageClient("Никнейм в teamspeak не совпадает с никнеймом в базе данных. Измени никнейм на "+databaseNickname, clid))
