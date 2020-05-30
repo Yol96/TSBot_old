@@ -6,7 +6,7 @@ import (
 
 type User struct {
 	ID       int    `db:"id"`
-	Nickname string `db:"nickname"`
+	Nickname string `db:"user_name"`
 	GroupID  int    `db:"group_id"`
 	Bantime  string `db:"srvbantime"`
 	Tag      string `db:"tag"`
@@ -14,7 +14,7 @@ type User struct {
 }
 
 func GetUserByTsId(teamspeakId string) (u User, err error) {
-	query := `SELECT * FROM ts_users WHERE ts_id = ?`
+	query := `SELECT * FROM phpbb_users WHERE ts_id = ?`
 	err = database.Db.Get(&u, query, teamspeakId)
 	return
 }

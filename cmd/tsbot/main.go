@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 
 	"github.com/Yol96/TSBot/internal/app/database"
 
@@ -28,11 +29,19 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Create log file
+	f, err := os.OpenFile("TsBot.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+	log.SetOutput(f)
+
 	// Creating an database connection
 	err = database.InitDB(config.DatabaseURL)
 	if err != nil {
 		log.Fatal(err)
-		return
 	}
 
 	if err := tsbot.Start(config); err != nil {
