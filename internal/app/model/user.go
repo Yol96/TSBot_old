@@ -14,7 +14,7 @@ type User struct {
 }
 
 func GetUserByTsId(teamspeakId string) (u User, err error) {
-	query := `SELECT * FROM phpbb_users WHERE ts_id = ?`
+	query := `SELECT user_id, username, group_id, srvbantime, tag, ts_id FROM phpbb_users WHERE ts_id = ?`
 	err = database.Db.Get(&u, query, teamspeakId)
 	return
 }
