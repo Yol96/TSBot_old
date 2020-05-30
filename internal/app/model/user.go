@@ -5,8 +5,8 @@ import (
 )
 
 type User struct {
-	ID       int    `db:"id"`
-	Nickname string `db:"user_name"`
+	ID       int    `db:"user_id"`
+	Nickname string `db:"username"`
 	GroupID  int    `db:"group_id"`
 	Bantime  string `db:"srvbantime"`
 	Tag      string `db:"tag"`
