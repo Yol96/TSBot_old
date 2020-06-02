@@ -69,15 +69,16 @@ func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) b
 	cluid := data.Params[0]["client_unique_identifier"]
 	nickname := data.Params[0]["client_nickname"]
 	log.Printf("Checking %s(%s) privileges", nickname, cluid)
+
+	// ForumBot ignore
+	if cluid == "03aJ0cNZvHRSs81kcjAV/OZMLh8=" {
+		return true
+	}
+
 	u, err := model.GetUserByTsId(cluid)
 	if err != nil {
 		log.Println(err)
 		u = model.User{0, "", 0, "", ""}
-	}
-
-	if isFound := FindInWhiteList(&u); isFound {
-		log.Printf("User was found in whitelist:%v(%v)", u.ID, u.Nickname)
-		return true
 	}
 
 	if u.TsID != cluid || u.TsID == "" {
@@ -118,14 +119,14 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 	nickname := data.Params[0]["client_nickname"]
 	log.Printf("Checking %s(%s) nickname", nickname, cluid)
 
+	// ForumBot ignore
+	if cluid == "03aJ0cNZvHRSs81kcjAV/OZMLh8=" {
+		return
+	}
+
 	u, err := model.GetUserByTsId(cluid)
 	if err != nil {
 		log.Println(err)
-	}
-
-	if isFound := FindInWhiteList(&u); isFound {
-		log.Printf("User was found in whitelist:%v(%v)", u.ID, u.Nickname)
-		return
 	}
 
 	databaseNickname := u.Nickname
@@ -138,15 +139,4 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 		log.Printf("Poke %s (Nickname in TS doesn`t match nickname in DB: %s)", nickname, databaseNickname)
 		client.Exec(PokeMessageClient("Никнейм в teamspeak не совпадает с никнеймом в базе данных. Измени никнейм на "+databaseNickname, clid))
 	}
-}
-
-// Checks client in whitelist
-func FindInWhiteList(u *model.User) bool {
-	whiteList := []int{153}
-	for _, el := range whiteList {
-		if u.ID == el {
-			return true
-		}
-	}
-	return false
 }
