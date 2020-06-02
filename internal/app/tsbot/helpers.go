@@ -74,6 +74,11 @@ func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) b
 		log.Println(err)
 	}
 
+	if isFound := FindInWhiteList(&u); isFound {
+		log.Printf("User was found in whitelist:%v(%v)", u.ID, u.Nickname)
+		return true
+	}
+
 	if u.TsID != cluid {
 		client.Exec(PokeMessageClient("TeamspeakID не найдет в базе данных", clid))
 		log.Printf("Poke %s (Can`t find tsId in DB)", nickname)
@@ -117,6 +122,11 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 		log.Println(err)
 	}
 
+	if isFound := FindInWhiteList(&u); isFound {
+		log.Printf("User was found in whitelist:%v(%v)", u.ID, u.Nickname)
+		return
+	}
+
 	databaseNickname := u.Nickname
 
 	if u.Tag != "" {
@@ -127,4 +137,15 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 		log.Printf("Poke %s (Nickname in TS doesn`t match nickname in DB: %s)", nickname, databaseNickname)
 		client.Exec(PokeMessageClient("Никнейм в teamspeak не совпадает с никнеймом в базе данных. Измени никнейм на "+databaseNickname, clid))
 	}
+}
+
+// Checks client in whitelist
+func FindInWhiteList(u *model.User) bool {
+	whiteList := []int{153}
+	for _, el := range whiteList {
+		if u.ID == el {
+			return true
+		}
+	}
+	return false
 }
