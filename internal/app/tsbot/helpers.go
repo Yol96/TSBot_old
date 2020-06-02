@@ -65,7 +65,7 @@ func GetClientInfo(clid string) ts3.Command {
 }
 
 // Checks client privileges
-func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) {
+func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) bool {
 	cluid := data.Params[0]["client_unique_identifier"]
 	nickname := data.Params[0]["client_nickname"]
 	log.Printf("Checking %s(%s) privileges", nickname, cluid)
@@ -78,10 +78,12 @@ func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) {
 		client.Exec(PokeMessageClient("TeamspeakID не найдет в базе данных", clid))
 		log.Printf("Poke %s (Can`t find tsId in DB)", nickname)
 		LockClient(client, data, clid)
+		return false
 	}
 
 	cldbid := data.Params[0]["client_database_id"]
 	client.Exec(AddClientServerGroup(strconv.Itoa(u.GroupID), cldbid))
+	return true
 }
 
 // Lock client (deletes all groups, except guest group)
@@ -115,7 +117,12 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 		log.Println(err)
 	}
 
-	databaseNickname := "[" + u.Tag + "]" + u.Nickname
+	databaseNickname := u.Nickname
+
+	if u.Tag != "" {
+		databaseNickname = "[" + u.Tag + "]" + u.Nickname
+	}
+
 	if nickname != databaseNickname {
 		log.Printf("Poke %s (Nickname in TS doesn`t match nickname in DB: %s)", nickname, databaseNickname)
 		client.Exec(PokeMessageClient("Никнейм в teamspeak не совпадает с никнеймом в базе данных. Измени никнейм на "+databaseNickname, clid))
