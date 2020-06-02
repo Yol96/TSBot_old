@@ -72,6 +72,7 @@ func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) b
 	u, err := model.GetUserByTsId(cluid)
 	if err != nil {
 		log.Println(err)
+		u = model.User{0, "", 0, "", ""}
 	}
 
 	if isFound := FindInWhiteList(&u); isFound {
@@ -79,7 +80,7 @@ func CheckClientPrivileges(client *ts3.Client, data ts3.Response, clid string) b
 		return true
 	}
 
-	if u.TsID != cluid {
+	if u.TsID != cluid || u.TsID == "" {
 		client.Exec(PokeMessageClient("TeamspeakID не найдет в базе данных", clid))
 		log.Printf("Poke %s (Can`t find tsId in DB)", nickname)
 		LockClient(client, data, clid)
