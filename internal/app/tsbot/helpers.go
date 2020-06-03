@@ -140,3 +140,10 @@ func CheckClientNickname(client *ts3.Client, data ts3.Response, clid string) {
 		client.Exec(PokeMessageClient("Никнейм в teamspeak не совпадает с никнеймом в базе данных. Измени никнейм на "+databaseNickname, clid))
 	}
 }
+
+// Calls whoami command
+func CallWhoAmI() ts3.Command {
+	return ts3.Command{
+		Command: "whoami",
+	}
+}

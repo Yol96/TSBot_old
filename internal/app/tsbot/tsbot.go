@@ -45,6 +45,11 @@ func Start(config *Config) error {
 	AddClientListeners(client)
 
 	for {
-		time.Sleep(5 * time.Second)
+		time.Sleep(20 * time.Second)
+		str, err := client.Exec(CallWhoAmI())
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println(str)
 	}
 }
